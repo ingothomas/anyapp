@@ -1,0 +1,5 @@
+>>> LINE1: Font Color, LINE2: Font Type, LINE3: Font Size, LINE4: Number of Feeds <<<
+white
+sans-serif
+14px
+2

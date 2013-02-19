@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+	body{
+		background:transparent;
+	}
+	.button{
+		background:#000000 url('button.png') no-repeat left top;
+		background-size:100% 100%;
+		padding:7px 7px 12px 12px;
+		border-radius:15px;
+		cursor:pointer;
+		font-weight:bold;
+	}
+	a:link{
+		font-weight:bold;
+		text-decoration:none;
+	}
+	a:active{
+		font-weight:bold;
+		text-decoration:underline;
+	}
+	.title{
+		padding:0px 0px 7px 0px;
+		font-weight:bold;
+		font-size:20px;
+	}
+	.links{
+		padding:7px 0px 15px 15px;
+	}
+</style>
+<script>
+var config='';
+var article_num=0;
+	function getParameterByName(name){
+		name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+		var regexS = "[\\?&]" + name + "=([^&#]*)";
+		var regex = new RegExp(regexS);
+		var results = regex.exec(window.location.search);
+		if(results == null){
+		return "";
+		}else{
+			return decodeURIComponent(results[1].replace(/\+/g, " "));
+		}
+	}
+
+	function applyConfig(config_elements){
+		config_elements=getConfiguration();
+		if(config_elements.length){
+			document.getElementById('canvas').style.color=config_elements[1];
+			document.getElementById('canvas').style.fontFamily=config_elements[2];
+			document.getElementById('canvas').style.fontSize=config_elements[3];
+			article_num=config_elements[4];
+		}
+	}
+
+	function getConfiguration(){
+		if (window.XMLHttpRequest) {
+			xmlhttp=new XMLHttpRequest;
+		}else {
+			xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+		}
+   		xmlhttp.open("GET","config.txt",false);
+		xmlhttp.send(null);
+		if(xmlhttp.status!=404){
+			var content=xmlhttp.responseText;
+			return content.split(String.fromCharCode(10));
+		}else{
+			return '';
+		}
+	}
+
+	function postContentFromFile(file_num){
+		if (window.XMLHttpRequest) {
+			xmlhttp=new XMLHttpRequest;
+		}else {
+			xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+		}
+   		xmlhttp.open("GET","anyapp_feed"+file_num+".txt",false);
+		xmlhttp.send(null);
+		if(xmlhttp.status!=404){
+			var content=xmlhttp.responseText;
+			content_segment=content.split(String.fromCharCode(10));
+			return content_segment.join('<br />');
+		}else{
+			return '';
+		}
+	}
+
+	function postLinksFromFile(file_num){
+		if (window.XMLHttpRequest) {
+			xmlhttp=new XMLHttpRequest;
+		}else {
+			xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+		}
+   		xmlhttp.open("GET","anyapp_links"+file_num+".txt",false);
+		xmlhttp.send(null);
+		if(xmlhttp.status!=404){
+			var content=xmlhttp.responseText;
+			content_segment=content.split(String.fromCharCode(10));
+			return content_segment.join('<br />');
+		}else{
+			return '';
+		}
+	}
+
+	function fileExists(url){
+		var http = new XMLHttpRequest();
+		http.open('HEAD', url, false);
+		http.send();
+		return http.status!=404;
+	}
+
+	function contentSwitch(){
+		var file_num=window.location.search.substr(1);
+		if(window.location.search!='?menu'){
+			var segments=postContentFromFile(file_num).split('<br />');
+			var title='<div class="title">'+segments.shift()+'</div>';
+			var main=segments.join('<br />');
+			if(fileExists('anyapp_img'+file_num+'.jpg')){
+				var image='<img src="anyapp_img'+file_num+'.jpg" style="float:right; margin:7px 0px 3px 7px;" />';
+			}else{
+				var image='';
+			}
+			var links_all=postLinksFromFile(file_num);
+			if(links_all.length){
+				var links=links_all.split('<br />')
+				var links_complete='<div class="links">';
+				for(x=0;x<links.length;x++){
+					links_segments=links[x].split('|');
+					links_complete+='<span onclick="window.open('+links_segments[0]+')" style="cursor:pointer; font-weight:bold;">'+links_segments[1]+'</span><br />';
+				}
+			}else{
+				var links_complete='';
+			}
+			links_complete+='</div>';
+			document.getElementById('canvas').innerHTML='<div align="right" style="font-size:12px;"><span onclick="document.location.href=\'relay.html?menu\';" style="cursor:pointer; font-weight:bold;">[BACK &gt;&gt;]</span></div>'+title+image+main+links_complete+'<div align="right" style="font-size:12px;"><span onclick="document.location.href=\'relay.html?menu\';" style="cursor:pointer; font-weight:bold;">[BACK &gt;&gt;]</span></div>';
+		}else{
+			var segment;
+			var body='';
+			var next=article_num;
+			while (next>0){
+				segment=postContentFromFile(next);
+				if(segment){
+					body+='<div class="button" onclick="document.location.href=\'relay.html?'+next+'\';">'+segment.substr(0,segment.indexOf('<br />'))+'</div>';
+					next--;
+				}
+			}
+			document.getElementById('canvas').innerHTML=body;
+		}
+	}
+
+</script>
+</head>
+<body id="canvas" onload="applyConfig();contentSwitch();">
+<div align="center">loading...</div>
+</body>
+</html>
