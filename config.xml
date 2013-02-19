@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <widget xmlns = "http://www.w3.org/ns/widgets"
 	xmlns:gap = "http://phonegap.com/ns/1.0"
-	id        = "com.warpsite.backtrack"
+	id        = "com.warpsite.anyapp"
 	version   = "1.0.0">
 	<preference name="phonegap-version" value="2.3.0" />
 
 <!-- versionCode is optional and Android only -->
 
-	<name>BackTrack</name>
+	<name>Any App</name>
 	
 	<description>
-		Store current location and find your way back to it, using Google Maps. 
+		Track public feed with pre-defined configuration
 	</description>
 	
 	<author email="ingothomas@gmail.com">
@@ -45,9 +45,9 @@
 	<gap:splash src="splash.png" gap:platform="android" gap:density="hdpi" />
 	<gap:splash src="splash.png" gap:platform="android" gap:density="xhdpi" />
 	<gap:splash src="splash.png" gap:platform="blackberry" />
-	<gap:splash src="splash.png" gap:platform="ios"     width="320" height="480" />
-	<gap:splash src="splash.png" gap:platform="ios"     width="640" height="960" />
-	<gap:splash src="splash.png" gap:platform="ios"     width="768" height="1024" />
+	<gap:splash src="splash.png" gap:platform="ios"     width="320" height="320" />
+	<gap:splash src="splash.png" gap:platform="ios"     width="640" height="640" />
+	<gap:splash src="splash.png" gap:platform="ios"     width="768" height="768" />
 	<gap:splash src="splash.png" gap:platform="ios"     width="1024" height="768" />
 	<gap:splash src="splash.png" gap:platform="winphone" />
 </widget>
