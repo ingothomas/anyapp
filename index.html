@@ -9,13 +9,6 @@
 
 	var config='';
 
-	if(!localStorage.anyapp_config){
-		var config=prompt('Please enter the resource URL:');
-		if(config){localStorage.anyapp_config=config;}
-	}else{
-		config=localStorage.anyapp_config;
-	}
-
 	function windowSize(){
 		if(document.body && document.body.offsetWidth){winW = document.body.offsetWidth; winH = document.body.offsetHeight;}
 		if(document.compatMode=='CSS1Compat' && document.documentElement && document.documentElement.offsetWidth){winW = document.documentElement.offsetWidth; winH = document.documentElement.offsetHeight;}
@@ -25,10 +18,21 @@
 	}
 
 	function primer(){
+		if(!localStorage.anyapp_config){
+			var config=prompt('Please enter the resource URL:');
+			if(config){
+				localStorage.anyapp_config=config;
+				document.getElementById('framepanel').innerHTML='<iframe id="window" width="100%" src="" allowTransparency="true" border="0" style="border:#000000 solid 0px;"></iframe>';
+			}
+		}else{
+			config=localStorage.anyapp_config;
+			document.getElementById('framepanel').innerHTML='<iframe id="window" width="100%" src="" allowTransparency="true" border="0" style="border:#000000 solid 0px;"></iframe>';
+		}
 		if(config){
 			document.getElementById('body').style.backgroundImage='url('+config+'button.png)';
 			document.getElementById('banner').style.backgroundImage='url('+config+'banner.png)';
 			document.getElementById('window').src=config+'relay.html?menu';
+			windowSize();
 		}
 	}
 
@@ -64,10 +68,10 @@
 		}
 	</style>
 	</head>
-	<body id="body" onload="primer();windowSize();" onresize="windowSize();">
+	<body id="body" onload="primer();" onresize="windowSize();">
 		<div id="banner">&nbsp;</div>
 		<div>&nbsp;</div>
-		<iframe id="window" width="100%" src="dummy.html" allowTransparency="true" border="0" style="border:#000000 solid 0px;"></iframe>
+		<div id="framepanel"></div>
 		<div style="margin-top:5px; display:none;" id="source"><span style="background-color:#000000; color:#cccccc; border-radius:5px; font-size:10px; cursor:pointer;" onclick="if(confirm('Reassign Resource URL?')){localStorage.anyapp_config='';window.location.reload();}">&nbsp;&nbsp;&nbsp;[new source]&nbsp;&nbsp;&nbsp;</span></div>
 	</body>
 </html>
